@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title}"></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link th:href="@{/styles/style.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/add-dish.css}" rel="stylesheet"/>
+</head>
+<body>
+<header th:insert="navigation.html :: header"></header>
+<div class="content">
+    <h1 th:text="#{add.dish}"></h1>
+    <form class="dish" action="api" method="POST">
+        <input type="hidden" name="command" value="addDish">
+        <input class="text" type="text" name="name" placeholder="Dish name...">
+        <p class="warning" th:text="#{}"></p>
+        <input class="text" type="text" name="nameUkr" placeholder="Назва страви...">
+        <p class="warning">${nameUkrMsg}</p>
+        <input class="text" type="text" name="imagePath" placeholder="google.com/image-link/">
+        <p class="warning">${imageMsg}</p>
+        <textarea name="description" rows="20" placeholder="Dish description"></textarea>
+        <textarea name="descriptionUkr" rows="20" placeholder="Опис страви..."></textarea>
+        <b>${price}
+            <input class="price" type="text" name="price" placeholder="80.00">
+            ${currency}
+        </b>
+        <p class="warning">${priceMsg}</p>
+        <b>${category}
+            <select name="category">
+                <c:forEach var="category" items="${categories}">
+                    <option value="${category.id}">${category.name}</option>
+                </c:forEach>
+            </select>
+        </b>
+        <button type="submit">${save}</button>
+    </form>
+</div>
+</body>
+</html>

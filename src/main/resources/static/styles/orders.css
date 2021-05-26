@@ -1,0 +1,38 @@
+table {
+    margin-top: 20px;
+    margin-bottom: 60px;
+    padding: 20px;
+    width: 70%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+th,
+td {
+    border-collapse: collapse;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid rgba(252, 113, 33, 0.2);
+}
+
+h2 {
+    color: white;
+}
+
+th {
+    padding: 18px 20px;
+    font-size: 20px;
+    color: rgb(252, 113, 33);
+}
+
+td {
+    padding: 15px 20px;
+    height: 100%;
+    font-size: 13px;
+    color: white;
+    text-wrap: normal;
+}
+
+td a {
+    font-weight: 600;
+}
