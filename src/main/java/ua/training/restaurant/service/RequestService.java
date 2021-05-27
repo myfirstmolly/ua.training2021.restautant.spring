@@ -15,7 +15,7 @@ public interface RequestService {
 
     Page<Request> findAllByUserAndStatus(User user, Status status, int pageNo);
 
-    Optional<Request> findById(Long id);
+    Optional<Request> findById(Integer id);
 
     Request findRequestInCart(User user);
 
@@ -24,4 +24,5 @@ public interface RequestService {
 
     Request updateRequestStatus(User manager, Request request, Status status);
 
+    Request save(Request request);
 }

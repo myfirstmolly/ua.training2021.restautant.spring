@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title}"></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link th:href="@{/styles/style.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{/styles/login.css}" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<header>
+    <nav>
+        <ul class="nav_links">
+            <li>
+                <a th:href="@{/menu#menu}" th:text="#{menu}"></a>
+            </li>
+            <li>
+                <a th:href="@{''(lang=#{language.code})}" th:text="#{language}"></a>
+            </li>
+        </ul>
+    </nav>
+    <a th:href="@{/register}">
+        <button th:text="#{register}"></button>
+    </a>
+</header>
+<div class="content">
+    <h2 th:text="#{enter.credentials.msg}"></h2>
+    <form name="f" method="POST" th:action="@{/login}">
+        <input type="text" id="username" name="username" class="input_field" th:placeholder="#{placeholder.login}">
+        <input type="password" id="password" name="password" class="input_field" th:placeholder="#{placeholder.password}">
+        <p th:if="${param.error}" class="warning" th:text="#{incorrect.credentials}"></p>
+        <input class="button" type="submit" th:value="#{login}">
+    </form>
+</div>
+</body>
+</html>

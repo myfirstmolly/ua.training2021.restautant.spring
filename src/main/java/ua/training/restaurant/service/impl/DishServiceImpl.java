@@ -1,7 +1,6 @@
 package ua.training.restaurant.service.impl;
 
 import ua.training.restaurant.dto.DishDto;
-import ua.training.restaurant.entities.Category;
 import ua.training.restaurant.entities.Dish;
 import ua.training.restaurant.repository.DishRepository;
 import ua.training.restaurant.service.CategoryService;
@@ -45,15 +44,15 @@ public class DishServiceImpl implements DishService {
         if (orderBy.equals("id")) {
             Pageable pageable = PageRequest.of(pageNo - 1, LIMIT);
             return dishRepository.findAllByCategory(
-                    categoryService.findById(Long.parseLong(category)).orElseThrow(RuntimeException::new), pageable);
+                    categoryService.findById(Integer.parseInt(category)).orElseThrow(RuntimeException::new), pageable);
         }
         Pageable pageable = PageRequest.of(pageNo - 1, LIMIT, Sort.by(orderBy));
         return dishRepository.findAllByCategory(
-                categoryService.findById(Long.parseLong(category)).orElseThrow(RuntimeException::new), pageable);
+                categoryService.findById(Integer.parseInt(category)).orElseThrow(RuntimeException::new), pageable);
     }
 
     @Override
-    public Optional<Dish> findById(Long id) {
+    public Optional<Dish> findById(Integer id) {
         return dishRepository.findById(id);
     }
 
@@ -77,7 +76,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public void deleteDish(long dish) {
+    public void deleteDish(Integer dish) {
         dishRepository.deleteById(dish);
     }
 }

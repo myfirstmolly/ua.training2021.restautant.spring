@@ -70,12 +70,12 @@ button:hover {
 
 .main_banner {
     display: flex;
+    background: url('main-banner.jpeg') center;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     background-size: cover;
-    background: url('../images/main-banner.jpeg') center;
 }
 
 h1 {

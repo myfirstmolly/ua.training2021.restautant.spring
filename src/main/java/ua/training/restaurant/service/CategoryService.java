@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface CategoryService {
 
-    Optional<Category> findById(Long id);
+    Optional<Category> findById(Integer id);
 
     Optional<Category> findByName(String name);
 

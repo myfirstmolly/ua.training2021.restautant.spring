@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,7 @@ public final class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
@@ -26,6 +27,6 @@ public final class Category implements Serializable {
     private String nameUkr;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-    private List<Dish> dishes;
+    private List<Dish> dishes = new ArrayList<>();
 
 }

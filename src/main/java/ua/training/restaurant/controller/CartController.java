@@ -1,5 +1,6 @@
 package ua.training.restaurant.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import ua.training.restaurant.service.RequestService;
 
 @Controller
 @RequestMapping("/cart")
+@Slf4j
 public class CartController {
 
     @Autowired
@@ -22,18 +24,6 @@ public class CartController {
 
     @Autowired
     private RequestItemService requestItemService;
-
-    @GetMapping("/add/{dish}")
-    public void addDishToCart(@PathVariable Dish dish,
-                              @AuthenticationPrincipal User user) {
-        requestItemService.addItem(dish, user);
-    }
-
-    @PutMapping("/decreaseQuantity/{dish}")
-    public void decreaseDishQuantity(@PathVariable Dish dish,
-                                     @AuthenticationPrincipal User user) {
-        requestItemService.decreaseQuantity(dish, user);
-    }
 
     @GetMapping
     public String getCart(Model model, @AuthenticationPrincipal User user) {
@@ -48,7 +38,21 @@ public class CartController {
         return "checkout-form";
     }
 
-    @PostMapping("/checkout")
+    @PostMapping("/add/{dish}")
+    public String addDishToCart(@PathVariable Dish dish,
+                                @AuthenticationPrincipal User user) {
+        requestItemService.addItem(dish, user);
+        return "redirect:/menu/dish/" + dish.getId();
+    }
+
+    @PostMapping(value = "/decreaseQuantity/{dish}")
+    public String decreaseDishQuantity(@PathVariable Dish dish,
+                                       @AuthenticationPrincipal User user) {
+        requestItemService.decreaseQuantity(dish, user);
+        return "redirect:/cart";
+    }
+
+    @PostMapping(value = "/checkout")
     public String checkout(@RequestParam String deliveryAddress, @AuthenticationPrincipal User user) {
         try {
             requestService.checkout(user, deliveryAddress);
@@ -58,9 +62,10 @@ public class CartController {
         return "redirect:/requests";
     }
 
-    @DeleteMapping("/{dish}")
-    public void removeDishFromCart(@PathVariable Dish dish, @AuthenticationPrincipal User user) {
+    @PostMapping(value = "/delete/{dish}")
+    public String removeDishFromCart(@PathVariable Dish dish, @AuthenticationPrincipal User user) {
         requestItemService.removeItem(dish, user);
+        return "redirect:/cart";
     }
 
 }

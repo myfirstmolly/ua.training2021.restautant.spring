@@ -25,10 +25,14 @@
             </div>
             <h4 th:text="|${dish.price/100} #{currency}|"></h4>
 
-            <button sec:authorize="hasAuthority('CUSTOMER')" type="submit" th:href="@{/cart/add/${dish.id}}"
-                    th:text="#{add.to.cart}">
-            </button>
-            <form sec:authorize="hasAuthority('MANAGER')" th:method="delete" th:action="@{/menu/delete/${dish.id}}">
+            <form sec:authorize="hasAuthority('CUSTOMER')"
+                  th:action="@{'/cart/add/' + ${dish.id}}"
+                  th:method="post">
+                <button th:text="#{add.to.cart}"></button>
+            </form>
+            <form sec:authorize="hasAuthority('MANAGER')"
+                  th:method="delete"
+                  th:action="@{'/menu/delete/' + ${dish.id}}">
                 <button th:text="#{delete}"></button>
             </form>
         </div>

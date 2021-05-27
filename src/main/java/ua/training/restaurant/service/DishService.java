@@ -12,10 +12,10 @@ public interface DishService {
 
     Page<Dish> findAll(int pageNo, String orderBy, String category);
 
-    Optional<Dish> findById(Long id);
+    Optional<Dish> findById(Integer id);
 
     Dish saveDish(DishDto dish);
 
-    void deleteDish(long id);
+    void deleteDish(Integer id);
 
 }

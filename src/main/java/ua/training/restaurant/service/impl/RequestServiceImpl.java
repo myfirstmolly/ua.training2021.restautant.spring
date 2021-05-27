@@ -1,5 +1,10 @@
 package ua.training.restaurant.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.training.restaurant.entities.Request;
 import ua.training.restaurant.entities.Role;
@@ -9,11 +14,6 @@ import ua.training.restaurant.exceptions.EmptyRequestException;
 import ua.training.restaurant.exceptions.RequestNotFoundException;
 import ua.training.restaurant.repository.RequestRepository;
 import ua.training.restaurant.service.RequestService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -42,7 +42,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Optional<Request> findById(Long id) {
+    public Optional<Request> findById(Integer id) {
         return requestRepository.findById(id);
     }
 
@@ -52,7 +52,11 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository
                 .findFirstByUserAndStatus(user, Status.OPENED)
                 .orElseGet(() -> {
-                    Request r = Request.builder().user(user).status(Status.OPENED).build();
+                    Request r = Request.builder()
+                            .user(user)
+                            .totalPrice(0L)
+                            .build();
+                    r.setStatus(Status.OPENED);
                     requestRepository.save(r);
                     return r;
                 });
@@ -79,6 +83,11 @@ public class RequestServiceImpl implements RequestService {
         if (Status.COOKING.equals(status))
             request.setApprovedBy(manager);
         request.setStatus(status);
+        return requestRepository.save(request);
+    }
+
+    @Override
+    public Request save(Request request) {
         return requestRepository.save(request);
     }
 }

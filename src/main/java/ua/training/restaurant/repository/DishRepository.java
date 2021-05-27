@@ -8,7 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DishRepository extends PagingAndSortingRepository<Dish, Long> {
+public interface DishRepository extends PagingAndSortingRepository<Dish, Integer> {
 
     Page<Dish> findAllByCategory(Category category, Pageable pageable);
 

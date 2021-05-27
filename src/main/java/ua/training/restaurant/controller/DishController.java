@@ -33,7 +33,6 @@ public class DishController {
         model.addAttribute("orderBy", orderBy);
         model.addAttribute("category", category);
         Page<Dish> dishPage = dishService.findAll(pageNo, orderBy, category);
-        log.info(pageNo.toString());
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("dishes", dishPage.getContent());
         model.addAttribute("page", dishPage);
@@ -50,19 +49,19 @@ public class DishController {
     public String goToAddDishPage(Model model) {
         log.info(categoryService.findAll().toString());
         model.addAttribute("categories", categoryService.findAll());
-        model.addAttribute("dishDto", new DishDto());
+        model.addAttribute("dish", new DishDto());
         return "add-dish";
     }
 
     @PostMapping("/add")
-    public String addDish(@Valid DishDto dishDto, BindingResult result) {
+    public String addDish(@Valid @ModelAttribute("dish") DishDto dish, BindingResult result) {
         if (result.hasErrors())
             return "add-dish";
-        return "redirect:/menu/dish/" + dishService.saveDish(dishDto).getId();
+        return "redirect:/menu/dish/" + dishService.saveDish(dish).getId();
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void deleteDish(@PathVariable Long id) {
+    @PostMapping(value = "/delete/{id}")
+    public void deleteDish(@PathVariable Integer id) {
         dishService.deleteDish(id);
     }
 }

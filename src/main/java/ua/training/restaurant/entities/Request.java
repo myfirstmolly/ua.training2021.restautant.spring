@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,14 +15,14 @@ import java.util.List;
 @ToString(exclude = "requestItems")
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"createdAt", "updatedAt", "requestItems"})
+@EqualsAndHashCode(exclude = {"requestItems"})
 @Builder
 @Table(name = "request")
 public final class Request implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", nullable = false)
@@ -36,19 +37,14 @@ public final class Request implements Serializable {
     private String deliveryAddress;
 
     @Column(name = "total_price")
+    @GeneratedValue
     private Long totalPrice;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "approved_by", nullable = false)
     private User approvedBy;
 
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    private Date updatedAt;
-
     @OneToMany(mappedBy = "request", fetch = FetchType.LAZY)
-    private List<RequestItem> requestItems;
+    private List<RequestItem> requestItems = new ArrayList<>();
 
 }

@@ -34,7 +34,7 @@
     <a sec:authorize="isAuthenticated()" th:href="@{/logout}">
         <button th:text="#{logout}"></button>
     </a>
-    <a sec:authorize="isAnonymous()" th:href="@{/login.html}">
+    <a sec:authorize="isAnonymous()" th:href="@{/login}">
         <button th:text="#{login}"></button>
     </a>
 </header>

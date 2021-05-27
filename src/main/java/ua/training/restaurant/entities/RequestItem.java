@@ -1,6 +1,7 @@
 package ua.training.restaurant.entities;
 
 import lombok.*;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
@@ -12,14 +13,14 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "createdAt")
 @Builder
 @Table(name = "request_item")
 public final class RequestItem {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "request_id", nullable = false)
@@ -33,10 +34,8 @@ public final class RequestItem {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int price;
-
-    @Column(name = "created_at", nullable = false)
-    private Date createdAt;
 
 }

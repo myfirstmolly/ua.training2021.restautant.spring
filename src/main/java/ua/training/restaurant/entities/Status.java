@@ -2,26 +2,20 @@ package ua.training.restaurant.entities;
 
 public enum Status {
 
-    OPENED(1, "відкрито"),
-    PENDING(2, "очікує підтвердження"),
-    COOKING(3, "готується"),
-    DELIVERING(4, "доставляється"),
-    DONE(5, "виконано");
+    OPENED(0),
+    PENDING(1),
+    COOKING(2),
+    DELIVERING(3),
+    DONE(4);
 
     int id;
-    String nameUkr;
 
-    Status(int id, String nameUkr) {
+    Status(int id) {
         this.id = id;
-        this.nameUkr = nameUkr;
     }
 
     public String getName() {
         return name().toLowerCase();
-    }
-
-    public String getNameUkr() {
-        return nameUkr;
     }
 
     public int getId() {

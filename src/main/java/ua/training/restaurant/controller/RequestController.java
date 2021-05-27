@@ -1,5 +1,6 @@
 package ua.training.restaurant.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/requests")
+@Slf4j
 public class RequestController {
 
     @Autowired
@@ -42,7 +44,7 @@ public class RequestController {
     }
 
     @GetMapping("/{id}")
-    public String getById(@PathVariable Long id, Model model) {
+    public String getById(@PathVariable Integer id, Model model) {
         model.addAttribute("request", requestService.findById(id));
         return "order";
     }

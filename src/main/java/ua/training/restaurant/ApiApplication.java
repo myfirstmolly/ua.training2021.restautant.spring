@@ -1,15 +1,16 @@
 package ua.training.restaurant;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.Ordered;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -18,8 +19,6 @@ import java.util.Locale;
 
 @SpringBootApplication
 public class ApiApplication implements WebMvcConfigurer {
-
-    private static final Logger logger = LogManager.getLogger(ApiApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(ApiApplication.class, args);
@@ -30,7 +29,6 @@ public class ApiApplication implements WebMvcConfigurer {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:i18n");
         messageSource.setDefaultEncoding("UTF-8");
-        logger.debug("configured message source");
         return messageSource;
     }
 
@@ -38,7 +36,6 @@ public class ApiApplication implements WebMvcConfigurer {
     public LocalValidatorFactoryBean validator(MessageSource messageSource) {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource);
-        logger.debug("configured validation message source");
         return bean;
     }
 
@@ -46,7 +43,6 @@ public class ApiApplication implements WebMvcConfigurer {
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
         localeResolver.setDefaultLocale(Locale.ENGLISH);
-        logger.debug("configured session locale resolver, default locale: en");
         return localeResolver;
     }
 
@@ -54,13 +50,28 @@ public class ApiApplication implements WebMvcConfigurer {
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");
-        logger.debug("configured locale change interceptor");
         return localeChangeInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
-        logger.debug("registered locale change interceptor");
     }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(
+                "/img/**",
+                "/css/**")
+                .addResourceLocations(
+                        "classpath:/static/images/",
+                        "classpath:/static/css/");
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/login").setViewName("login");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
+
 }

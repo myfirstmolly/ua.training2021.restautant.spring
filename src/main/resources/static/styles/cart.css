@@ -123,6 +123,8 @@ b {
 
 .counter {
     margin-left: 3vh;
+    display: flex;
+    flex-direction: row;
 }
 
 .cart_container .menu_img {

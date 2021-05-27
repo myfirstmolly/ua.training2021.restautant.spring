@@ -1,10 +1,8 @@
 package ua.training.restaurant.dto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -26,7 +24,7 @@ public class UserDto implements Serializable {
 
     @NotNull(message = "{user.name.notnull}")
     @Size(min = 3, max = 32, message = "{user.name.length}")
-    @Pattern(regexp = "\\p{Lu}\\p{L}", message = "{user.name.characters}")
+    @Pattern(regexp = "\\p{Lu}\\p{L}+", message = "{user.name.characters}")
     private String name;
 
     @NotNull(message = "{phone.notnull}")

@@ -16,7 +16,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public Optional<Category> findById(Long id) {
+    public Optional<Category> findById(Integer id) {
         return categoryRepository.findById(id);
     }
 

@@ -5,6 +5,7 @@ import ua.training.restaurant.dto.DishDto;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public final class Dish implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -45,6 +46,6 @@ public final class Dish implements Serializable {
     private Category category;
 
     @OneToMany(mappedBy = "dish", fetch = FetchType.LAZY)
-    private List<RequestItem> requestItems;
+    private List<RequestItem> requestItems = new ArrayList<>();
 
 }

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface RequestItemService {
 
-    Optional<RequestItem> findById(Long id);
+    Optional<RequestItem> findById(Integer id);
 
     void addItem(Dish dish, User user);
 

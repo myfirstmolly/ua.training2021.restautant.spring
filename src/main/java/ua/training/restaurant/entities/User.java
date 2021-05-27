@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public final class User implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false, unique = true, length = 16)
     private String username;
@@ -44,10 +45,10 @@ public final class User implements UserDetails, Serializable {
     private Role role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Request> requests;
+    private List<Request> requests = new ArrayList<>();
 
     @OneToMany(mappedBy = "approvedBy", fetch = FetchType.LAZY)
-    private List<Request> approvedRequests;
+    private List<Request> approvedRequests = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

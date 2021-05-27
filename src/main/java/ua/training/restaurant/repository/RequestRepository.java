@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface RequestRepository extends PagingAndSortingRepository<Request, Long> {
+public interface RequestRepository extends PagingAndSortingRepository<Request, Integer> {
 
     Page<Request> findAllByUserAndStatusNot(User user, Status status, Pageable pageable);
 

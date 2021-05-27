@@ -14,7 +14,7 @@
 <header th:insert="navigation :: header"></header>
 <div class="content">
     <h1 th:text="#{add.dish}"></h1>
-    <form class="dish" action="#" th:action="@{/menu/add}" th:object="${dishDto}" method="POST">
+    <form class="dish" action="#" th:action="@{/menu/add}" th:object="${dish}" method="POST">
 
         <input class="text" type="text" th:field="*{name}" placeholder="Dish name...">
         <p class="warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
@@ -32,14 +32,16 @@
         <p class="warning" th:if="${#fields.hasErrors('descriptionUkr')}" th:errors="*{descriptionUkr}"></p>
 
         <b th:text="#{price}"></b>
-            <input class="price" type="text" th:field="*{descriptionUkr}" placeholder="80.00">
+        <input class="price" type="text" th:field="*{descriptionUkr}" placeholder="80.00">
         <b th:text="#{currency}"></b>
         <p class="warning" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
 
         <b th:text="#{category}">
-            <select th:each="category : ${categories}" name="category">
-                <option th:if="${#locale eq 'ukr'}" th:field="*{category}" th:value="${category}"
-                th:text="${#locale eq 'ukr' ? category.nameUkr : category.name}"></option>
+            <select>
+                <option th:each="category : ${categories}" name="category"
+                        th:if="${#locale eq 'ukr'}" th:field="*{category}" th:value="${category}"
+                        th:text="${#locale eq 'ukr' ? category.nameUkr : category.name}">
+                </option>
             </select>
         </b>
         <button type="submit" th:text="#{save}"></button>

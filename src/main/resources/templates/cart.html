@@ -6,48 +6,48 @@
     <title th:text="#{title}"></title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link th:href="@{/styles/style.css}" rel="stylesheet"/>
-    <link th:href="@{/styles/add-dish.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/cart.css}" rel="stylesheet"/>
 </head>
 
 <body>
 <header th:insert="navigation :: header"></header>
-<div class="cart_container" th:each="requestItem : ${request.requestItems}">
-    <div class="dish">
-        <form action="#" th:action="@{/cart/${requestItem.id}}" th:method="delete">
+<div class="cart_container">
+    <div class="dish" th:each="item : ${request.requestItems}">
+        <form action="#" th:action="@{'/cart/delete/' + ${item.dish.id}}" th:method="post">
             <div class="menu_img">
                 <button type="submit" class="delete_icon">X</button>
-                <img th:src="${requestItem.dish.imagePath}">
+                <img th:src="${item.dish.imagePath}">
             </div>
         </form>
         <div class="details">
-            <a th:href="@{/menu/dish/${requestItem.dish.id}}">
-                <h2 th:text="${#locale eq 'ukr' ? requestItem.dish.nameUkr : requestItem.dish.name}"></h2>
+            <a th:href="@{'/menu/dish/' + ${item.dish.id}}">
+                <h2 th:text="${#locale.toString()} == 'ukr' ? ${item.dish.nameUkr} : ${item.dish.name}"></h2>
             </a>
             <b th:text="#{quantity}">: </b>
             <span class="counter">
-                <a th:href="@{/cart/decreaseQuantity/${requestItem.id}}">
+                <form th:action="@{/cart/decreaseQuantity/}" th:method="post">
+                    <input type="hidden" name="item" th:value="${item.dish.id}">
                     <b class="change_button" id="minus"> - </b>
-                </a>
-                <b id="counter" th:text="${requestItem.quantity}"></b>
-                <a th:href="@{/cart/add/${requestItem.id}}">
+                </form>
+                <b id="counter" th:text="${item.quantity}"></b>
+                <form th:action="@{/cart/add/}" th:method="post">
+                    <input type="hidden" name="item" th:value="${item.dish.id}">
                     <b class="change_button" id="plus"> + </b>
-                </a>
+                </form>
             </span>
         </div>
         <div class="price">
-            <h3 class="item_price" th:text="${requestItem.price/100}"></h3>
+            <h3 class="item_price" th:text="${item.price/100}"></h3>
             <h3 class="currency" th:text="#{currency}"></h3>
         </div>
     </div>
-    </c:forEach>
     <div class="total">
         <div>
             <b id="total" th:text="#{total} + ':'"></b>
-            <b id="sum" th:text="${request.totalPrice}"></b>
+            <b id="sum" th:text="${request.totalPrice/100}"></b>
             <b th:text="#{currency}"></b>
         </div>
-        <form action="/checkout" class="checkout" method="get">
+        <form th:action="@{/cart/checkout}" class="checkout" method="get">
             <button type="submit" th:text="#{checkout}"></button>
         </form>
     </div>

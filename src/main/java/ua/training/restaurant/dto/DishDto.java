@@ -1,6 +1,5 @@
 package ua.training.restaurant.dto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ua.training.restaurant.entities.Category;

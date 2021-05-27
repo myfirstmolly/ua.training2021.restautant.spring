@@ -25,7 +25,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .anyRequest().permitAll()
-                .and().formLogin().loginPage("/login.html").successForwardUrl("/menu").permitAll()
+                .and().formLogin().loginPage("/login")
+                .loginProcessingUrl("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/menu").permitAll()
                 .and().logout().logoutSuccessUrl("/menu")
                 .and().csrf().disable();
     }

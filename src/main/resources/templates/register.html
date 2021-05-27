@@ -1,0 +1,41 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title}"></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link th:href="@{/styles/style.css}" type="text/css" rel="stylesheet"/>
+    <link th:href="@{/styles/login.css}" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<header th:insert="navigation :: header"></header>
+<div class="content">
+    <h2 th:text="#{enter.credentials.msg}"></h2>
+    <form th:action="@{/register}" th:object="${user}" method="POST" action="#">
+
+        <input type="text" th:field="*{name}" class="input_field" placeholder="John Doe">
+        <p class="warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+
+        <input type="email" th:field="*{email}" class="input_field" placeholder="johnDoe@gmail.com">
+        <p class="warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+
+        <input type="tel" th:field="*{phoneNumber}" class="input_field" placeholder="(067)123-45-67">
+        <p class="warning" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
+
+        <input type="text" th:field="*{username}" class="input_field" placeholder="username">
+        <p class="warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+        <p class="warning" th:if="${notUniqueUsername}" th:text="#{username.notunique}"></p>
+
+        <input type="password" th:field="*{password}" class="input_field" placeholder="password">
+        <p class="warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+
+        <input class="button" type="submit" th:value="#{register}">
+    </form>
+</div>
+
+</body>
+</html>
