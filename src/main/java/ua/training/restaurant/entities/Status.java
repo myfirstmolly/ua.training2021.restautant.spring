@@ -1,5 +1,8 @@
 package ua.training.restaurant.entities;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum Status {
 
     OPENED(0),
@@ -20,6 +23,10 @@ public enum Status {
 
     public int getId() {
         return id;
+    }
+
+    public static List<Status> getSublist(int from) {
+        return Arrays.asList(Status.values()).subList(from, Status.values().length);
     }
 
 }

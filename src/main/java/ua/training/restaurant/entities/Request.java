@@ -29,7 +29,7 @@ public final class Request implements Serializable {
     private User user;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "status_id")
+    @Column(name = "status_id", nullable = false)
     private Status status;
 
     @Column(name = "delivery_address")
@@ -41,7 +41,7 @@ public final class Request implements Serializable {
     private Long totalPrice;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "approved_by", nullable = false)
+    @JoinColumn(name = "approved_by")
     private User approvedBy;
 
     @OneToMany(mappedBy = "request", fetch = FetchType.LAZY)

@@ -5,6 +5,7 @@ import lombok.Setter;
 import ua.training.restaurant.entities.Category;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -13,13 +14,16 @@ import java.io.Serializable;
 @Setter
 public class DishDto implements Serializable {
 
+    @NotNull(message = "{dish.name.blank}")
     @NotBlank(message = "{dish.name.blank}")
     private String name;
 
+    @NotNull(message = "{dish.name.blank}")
     @NotBlank(message = "{dish.name.blank}")
     private String nameUkr;
 
-    @Pattern(regexp = "([0-9]+\\.[0-9]{2})|([0-9]+)", message = "{dish.price.incorrect}")
+    @Pattern(regexp = "([0-9]{2,5}\\.[0-9]{2})", message = "{dish.price.incorrect}")
+    @NotNull(message = "{dish.price.incorrect}")
     private String price;
 
     @Size(max = 2048, message = "{dish.description.maxsize}")
@@ -28,10 +32,11 @@ public class DishDto implements Serializable {
     @Size(max = 2048, message = "{dish.description.maxsize}")
     private String descriptionUkr;
 
+    @NotNull(message = "{dish.image.blank}")
     @NotBlank(message = "{dish.image.blank}")
     private String imagePath;
 
-    @NotBlank(message = "{dish.category.blank}")
+    @NotNull(message = "{dish.category.blank}")
     private Category category;
 
 }

@@ -11,9 +11,7 @@ import java.util.Optional;
 
 public interface RequestService {
 
-    Page<Request> findAllByUser(User user, int pageNo);
-
-    Page<Request> findAllByUserAndStatus(User user, Status status, int pageNo);
+    Page<Request> findAllByUserAndStatus(User user, String status, int pageNo);
 
     Optional<Request> findById(Integer id);
 

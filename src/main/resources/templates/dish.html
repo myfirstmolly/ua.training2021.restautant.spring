@@ -31,7 +31,7 @@
                 <button th:text="#{add.to.cart}"></button>
             </form>
             <form sec:authorize="hasAuthority('MANAGER')"
-                  th:method="delete"
+                  th:method="post"
                   th:action="@{'/menu/delete/' + ${dish.id}}">
                 <button th:text="#{delete}"></button>
             </form>

@@ -51,7 +51,7 @@ public class RequestItemServiceImpl implements RequestItemService {
     public void decreaseQuantity(Dish dish, User user) {
         Request request = requestService.findRequestInCart(user);
         requestItemRepository
-                .findFirstByRequest(request)
+                .findFirstByRequestAndDish(request, dish)
                 .ifPresent(i -> {
                     if (i.getQuantity() > 1) {
                         i.setQuantity(i.getQuantity() - 1);

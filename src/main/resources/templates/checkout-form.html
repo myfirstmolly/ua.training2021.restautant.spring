@@ -17,9 +17,7 @@
     <h1 th:text="#{checkout}"></h1>
     <form class="delivery" action="#" th:action="@{/cart/checkout}" method="POST">
         <textarea name="deliveryAddress" rows="3" th:placeholder="#{my.address}"></textarea>
-        <b class="total" th:text="#{total}">
-            <b id="sum" th:text="${request.totalPrice/100} + ' ' + #{currency}"></b>
-        </b>
+        <b class="total" th:text="#{total} + ': ' + ${request.totalPrice/100} + ' ' + #{currency}"></b>
         <button type="submit" th:text="#{submit}"></button>
     </form>
 </div>

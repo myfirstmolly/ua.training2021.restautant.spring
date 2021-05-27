@@ -1,10 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="#{title}"></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link th:href="@{/styles/style.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/orders.css}" rel="stylesheet"/>
 </head>
-<body>
 
+<body>
+<header th:insert="navigation :: header"></header>
+
+<div class="content">
+    <div class="menu">
+        <div class="options">
+            <div class="dropdown">
+                <button class="dropbtn" th:text="#{select.order.status}"></button>
+                <div class="dropdown-content">
+                    <a th:href="@{/requests}" th:text="#{all}"></a>
+                    <a th:each="st : ${statusList}" th:text="${st}" th:href="@{'requests?status=' + ${st}}"></a>
+                </div>
+            </div>
+        </div>
+        <table th:if="${requests.size() > 0}" class="orders">
+            <tr>
+                <th th:text="#{order} + '#'"></th>
+                <th th:text="#{username}" sec:authorize="hasAuthority('MANAGER')"></th>
+                <th th:text="#{phone.number}" sec:authorize="hasAuthority('MANAGER')"></th>
+                <th th:text="#{delivery.address}"></th>
+                <th th:text="#{status}"></th>
+                <th th:text="#{total}"></th>
+            </tr>
+            <tr th:each="req : ${requests}">
+                <td><a th:href="@{'/requests/' + ${req.id}}" th:text="'#' + ${req.id}"></a></td>
+                <td th:text="${req.user.username}" sec:authorize="hasAuthority('MANAGER')"></td>
+                <td th:text="${req.user.phoneNumber}" sec:authorize="hasAuthority('MANAGER')"></td>
+                <td th:text="${req.deliveryAddress}"></td>
+                <td th:text="${req.status.name}"></td>
+                <td th:text="${req.totalPrice/100} + ' ' + #{currency}"></td>
+            </tr>
+        </table>
+
+        <div th:if="${requestPage.totalPages > 1}" class="pagination">
+            <a th:each="i : ${#numbers.sequence(1, requestPage.totalPages)}" th:text="${i}"
+               th:href="@{'/requests?pageNo=' + ${i} + '&status=' + ${currentStatus}}">
+            </a>
+        </div>
+        <h2 th:if="${requestPage.totalPages == 0}" th:text="#{no.orders}" style="color: white"></h2>
+    </div>
+</div>
 </body>
 </html>

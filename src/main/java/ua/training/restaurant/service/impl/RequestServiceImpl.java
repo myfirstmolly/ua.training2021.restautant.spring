@@ -26,19 +26,14 @@ public class RequestServiceImpl implements RequestService {
     private static final int LIMIT = 10;
 
     @Override
-    public Page<Request> findAllByUser(User user, int pageNo) {
+    public Page<Request> findAllByUserAndStatus(User user, String status, int pageNo) {
+        if (status.equals("all")) {
+            return findAllByUser(user, pageNo);
+        }
         Pageable pageable = PageRequest.of(pageNo - 1, LIMIT);
         if (user.getRole().equals(Role.MANAGER))
-            return requestRepository.findAllByStatusNot(Status.OPENED, pageable);
-        return requestRepository.findAllByUserAndStatusNot(user, Status.OPENED, pageable);
-    }
-
-    @Override
-    public Page<Request> findAllByUserAndStatus(User user, Status status, int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo - 1, LIMIT);
-        if (user.getRole().equals(Role.MANAGER))
-            return requestRepository.findAllByStatus(status, pageable);
-        return requestRepository.findAllByUserAndStatus(user, status, pageable);
+            return requestRepository.findAllByStatus(Status.valueOf(status), pageable);
+        return requestRepository.findAllByUserAndStatus(user, Status.valueOf(status), pageable);
     }
 
     @Override
@@ -89,5 +84,12 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public Request save(Request request) {
         return requestRepository.save(request);
+    }
+
+    private Page<Request> findAllByUser(User user, int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, LIMIT);
+        if (user.getRole().equals(Role.MANAGER))
+            return requestRepository.findAllByStatusNot(Status.OPENED, pageable);
+        return requestRepository.findAllByUserAndStatusNot(user, Status.OPENED, pageable);
     }
 }

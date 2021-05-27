@@ -23,7 +23,7 @@
         <p class="warning" th:if="${#fields.hasErrors('nameUkr')}" th:errors="*{nameUkr}"></p>
 
         <input class="text" type="text" th:field="*{imagePath}" placeholder="google.com/image-link/">
-        <p class="warning" th:if="${#fields.hasErrors('nameUkr')}" th:errors="*{imagePath}"></p>
+        <p class="warning" th:if="${#fields.hasErrors('imagePath')}" th:errors="*{imagePath}"></p>
 
         <textarea th:field="*{description}" rows="20" placeholder="Dish description"></textarea>
         <p class="warning" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
@@ -32,18 +32,18 @@
         <p class="warning" th:if="${#fields.hasErrors('descriptionUkr')}" th:errors="*{descriptionUkr}"></p>
 
         <b th:text="#{price}"></b>
-        <input class="price" type="text" th:field="*{descriptionUkr}" placeholder="80.00">
-        <b th:text="#{currency}"></b>
+            <input class="price" type="text" th:field="*{price}" placeholder="80.00">
         <p class="warning" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
 
-        <b th:text="#{category}">
-            <select>
-                <option th:each="category : ${categories}" name="category"
-                        th:if="${#locale eq 'ukr'}" th:field="*{category}" th:value="${category}"
-                        th:text="${#locale eq 'ukr' ? category.nameUkr : category.name}">
-                </option>
-            </select>
-        </b>
+        <b th:text="#{category}"></b>
+        <select th:field="*{category}">
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:text="${#locale.toString()} == 'ukr' ? ${category.nameUkr} : ${category.name}">
+            </option>
+        </select>
+
+        <p class="warning" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
         <button type="submit" th:text="#{save}"></button>
     </form>
 </div>

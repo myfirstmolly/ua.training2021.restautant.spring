@@ -121,6 +121,11 @@ b {
     cursor: pointer;
 }
 
+.counter-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
 .counter {
     margin-left: 3vh;
     display: flex;

@@ -2,17 +2,21 @@ package ua.training.restaurant.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.training.restaurant.dto.RequestDto;
+import ua.training.restaurant.entities.Request;
 import ua.training.restaurant.entities.Status;
 import ua.training.restaurant.entities.User;
+import ua.training.restaurant.exceptions.ObjectNotFoundException;
 import ua.training.restaurant.service.RequestService;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/requests")
@@ -24,36 +28,39 @@ public class RequestController {
 
     @GetMapping
     public String getAllRequests(@RequestParam(defaultValue = "1") Integer pageNo,
+                                 @RequestParam(defaultValue = "all") String status,
                                  @AuthenticationPrincipal User user,
                                  Model model) {
-        model.addAttribute("requests", requestService.findAllByUser(user, pageNo));
-        return "orders";
-    }
-
-    @GetMapping("/status")
-    public String getAllRequestsByStatus(@RequestParam(defaultValue = "1") Integer pageNo,
-                                         @RequestParam String status,
-                                         @AuthenticationPrincipal User user,
-                                         Model model) {
         if (status.equalsIgnoreCase(Status.OPENED.getName()))
             return "redirect:/cart";
 
-        model.addAttribute("requests", requestService.findAllByUserAndStatus(user,
-                Status.valueOf(status), pageNo));
+        Page<Request> requestPage = requestService.findAllByUserAndStatus(user, status, pageNo);
+        model.addAttribute("requests", requestPage.getContent());
+        model.addAttribute("requestPage", requestPage);
+        model.addAttribute("statusList", Arrays.asList(Status.values()).subList(1, Status.values().length));
+        model.addAttribute("currentStatus", status);
         return "orders";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable Integer id, Model model) {
-        model.addAttribute("request", requestService.findById(id));
+        Request request = requestService.findById(id).orElseThrow(() ->
+                new ObjectNotFoundException("can't find order"));
+        model.addAttribute("order", request);
+        model.addAttribute("statusList", Status.getSublist(request.getStatus().getId() + 1));
+        model.addAttribute("requestDto", new RequestDto());
         return "order";
     }
 
-    @PostMapping
-    public void setRequestStatus(@Valid RequestDto request, BindingResult result, @AuthenticationPrincipal User user) {
-        if (result.hasErrors())
-            return;
-        requestService.updateRequestStatus(user, request.getRequest(), request.getStatus());
+    @PostMapping("/{request}")
+    public String setRequestStatus(@PathVariable Request request,
+                                   @RequestParam(name = "status", required = false) Status status,
+                                   @AuthenticationPrincipal User user) {
+        if (request == null || status == null)
+            return "redirect:/requests";
+
+        requestService.updateRequestStatus(user, request, status);
+        return "redirect:/requests/" + request.getId();
     }
 
 }

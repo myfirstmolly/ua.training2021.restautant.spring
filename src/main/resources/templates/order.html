@@ -1,10 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="#{title}"></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link th:href="@{/styles/style.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/order.css}" rel="stylesheet"/>
 </head>
+
 <body>
+<header th:insert="navigation :: header"></header>
+
+<div class="order_container">
+
+    <h2 th:text="#{status} + ': ' + ${order.status.name}"></h2>
+
+    <div class="dish" th:each="requestItem : ${order.requestItems}">
+        <div class="menu_img">
+            <img th:src="${requestItem.dish.imagePath}">
+        </div>
+        <div class="details">
+            <a th:href="@{'/menu/dish/' + ${requestItem.dish.id}}">
+                <h2 th:text="${#locale.toString()} == 'ukr' ? ${requestItem.dish.nameUkr} :
+                ${requestItem.dish.name}"></h2>
+            </a>
+            <b th:text="#{quantity} + ': '"></b>
+            <b id="counter" th:text="' ' + ${requestItem.quantity} + ' '"></b>
+        </div>
+        <div class="price">
+            <h3 class="item_price" th:text="${requestItem.price/100}"></h3>
+            <h3 class="currency" th:text="#{currency}"></h3>
+        </div>
+    </div>
+    <div class="total">
+        <div>
+            <b id="total" th:text="#{total} + ':'"></b>
+            <b id="sum" th:text="${order.totalPrice/100}"></b>
+            <b th:text="#{currency}"></b>
+        </div>
+    </div>
+</div>
+
+<form sec:authorize="hasAuthority('MANAGER')" action="#" th:action="@{'/requests/' + ${order.id}}"
+      method="post">
+    <p th:text="#{update.status} + ':'"></p>
+    <select name="status" >
+        <option th:each="status : ${statusList}" th:value="${status}" th:text="${status.name}">
+        </option>
+    </select>
+    <button type="submit" th:text="#{save}"></button>
+</form>
 
 </body>
 </html>

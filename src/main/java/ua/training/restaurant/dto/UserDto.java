@@ -15,7 +15,7 @@ public class UserDto implements Serializable {
 
     @NotNull(message = "{username.notnull}")
     @Size(min = 4, max = 16, message = "{username.length}")
-    @Pattern(regexp = "[A-Za-z_]+", message = "{username.characters}")
+    @Pattern(regexp = "[A-Za-z_0-9]+", message = "{username.characters}")
     private String username;
 
     @NotNull(message = "{password.notnull}")
@@ -32,7 +32,6 @@ public class UserDto implements Serializable {
             message = "{phone.characters}")
     private String phoneNumber;
 
-    @Pattern(regexp = "[A-Za-z]+@[A-Za-z]+\\.[a-z]+", message = "{email.message}")
     @Email(message = "{email.message}")
     private String email;
 
