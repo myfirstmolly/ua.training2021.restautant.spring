@@ -8,8 +8,6 @@ import java.util.Optional;
 
 public interface RequestItemService {
 
-    Optional<RequestItem> findById(Integer id);
-
     void addItem(Dish dish, User user);
 
     void decreaseQuantity(Dish dish, User user);

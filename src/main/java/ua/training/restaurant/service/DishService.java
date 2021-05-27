@@ -8,11 +8,7 @@ import java.util.Optional;
 
 public interface DishService {
 
-    Page<Dish> findAll(int pageNo);
-
     Page<Dish> findAll(int pageNo, String orderBy, String category);
-
-    Optional<Dish> findById(Integer id);
 
     Dish saveDish(DishDto dish);
 

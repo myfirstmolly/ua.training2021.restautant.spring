@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import ua.training.restaurant.entities.Dish;
 import ua.training.restaurant.entities.Request;
 import ua.training.restaurant.entities.User;
-import ua.training.restaurant.exceptions.EmptyRequestException;
-import ua.training.restaurant.exceptions.RequestNotFoundException;
 import ua.training.restaurant.service.RequestItemService;
 import ua.training.restaurant.service.RequestService;
 
@@ -61,12 +59,8 @@ public class CartController {
 
     @PostMapping(value = "/checkout")
     public String checkout(@RequestParam String deliveryAddress, @AuthenticationPrincipal User user) {
-        try {
-            requestService.checkout(user, deliveryAddress);
-        } catch (RequestNotFoundException | EmptyRequestException e) {
-            return "redirect:/cart";
-        }
-        return "redirect:/requests";
+        requestService.checkout(user, deliveryAddress);
+        return "redirect:/cart";
     }
 
     @PostMapping(value = "/delete/{dish}")

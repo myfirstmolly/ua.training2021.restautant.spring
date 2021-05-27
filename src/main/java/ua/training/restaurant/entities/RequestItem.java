@@ -1,11 +1,9 @@
 package ua.training.restaurant.entities;
 
 import lombok.*;
-import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
-import java.util.Date;
 
 @Entity
 @Getter

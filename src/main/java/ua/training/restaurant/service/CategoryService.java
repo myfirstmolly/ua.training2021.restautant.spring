@@ -9,8 +9,6 @@ public interface CategoryService {
 
     Optional<Category> findById(Integer id);
 
-    Optional<Category> findByName(String name);
-
     List<Category> findAll();
 
 }

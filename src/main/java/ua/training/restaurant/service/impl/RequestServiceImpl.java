@@ -74,11 +74,11 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Request updateRequestStatus(User manager, Request request, Status status) {
+    public void updateRequestStatus(User manager, Request request, Status status) {
         if (Status.COOKING.equals(status))
             request.setApprovedBy(manager);
         request.setStatus(status);
-        return requestRepository.save(request);
+        requestRepository.save(request);
     }
 
     @Override

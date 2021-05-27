@@ -1,15 +1,16 @@
 package ua.training.restaurant.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import ua.training.restaurant.repository.RequestItemRepository;
-import ua.training.restaurant.service.RequestItemService;
-import ua.training.restaurant.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.training.restaurant.entities.*;
-
-import java.util.Optional;
+import ua.training.restaurant.entities.Dish;
+import ua.training.restaurant.entities.Request;
+import ua.training.restaurant.entities.RequestItem;
+import ua.training.restaurant.entities.User;
+import ua.training.restaurant.repository.RequestItemRepository;
+import ua.training.restaurant.service.RequestItemService;
+import ua.training.restaurant.service.RequestService;
 
 @Service
 @Slf4j
@@ -20,11 +21,6 @@ public class RequestItemServiceImpl implements RequestItemService {
 
     @Autowired
     private RequestService requestService;
-
-    @Override
-    public Optional<RequestItem> findById(Integer id) {
-        return requestItemRepository.findById(id);
-    }
 
     @Override
     @Transactional

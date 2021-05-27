@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title}"></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link th:href="@{/styles/style.css}" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<header th:insert="navigation :: header"></header>
+
+<div class="content">
+    <div class="main_banner">
+        <h1 th:text="${status}"></h1>
+        <p th:text="${errorMessage}"></p>
+    </div>
+</div>
+</body>
+</html>

@@ -6,16 +6,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.training.restaurant.dto.RequestDto;
 import ua.training.restaurant.entities.Request;
 import ua.training.restaurant.entities.Status;
 import ua.training.restaurant.entities.User;
-import ua.training.restaurant.exceptions.ObjectNotFoundException;
+import ua.training.restaurant.exceptions.EmptyRequestException;
+import ua.training.restaurant.exceptions.EmptyStatusException;
+import ua.training.restaurant.exceptions.RequestNotFoundException;
 import ua.training.restaurant.service.RequestService;
 
-import javax.validation.Valid;
 import java.util.Arrays;
 
 @Controller
@@ -44,20 +44,20 @@ public class RequestController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable Integer id, Model model) {
-        Request request = requestService.findById(id).orElseThrow(() ->
-                new ObjectNotFoundException("can't find order"));
+        Request request = requestService.findById(id).orElseThrow(RequestNotFoundException::new);
         model.addAttribute("order", request);
         model.addAttribute("statusList", Status.getSublist(request.getStatus().getId() + 1));
         model.addAttribute("requestDto", new RequestDto());
         return "order";
     }
 
-    @PostMapping("/{request}")
+    @PostMapping("/update/{request}")
     public String setRequestStatus(@PathVariable Request request,
                                    @RequestParam(name = "status", required = false) Status status,
                                    @AuthenticationPrincipal User user) {
-        if (request == null || status == null)
-            return "redirect:/requests";
+
+        if (request == null) throw new EmptyRequestException();
+        if (status == null) throw new EmptyStatusException();
 
         requestService.updateRequestStatus(user, request, status);
         return "redirect:/requests/" + request.getId();

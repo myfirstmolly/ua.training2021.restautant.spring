@@ -1,7 +1,6 @@
 package ua.training.restaurant.entities;
 
 import lombok.*;
-import ua.training.restaurant.dto.DishDto;
 
 import javax.persistence.*;
 import java.io.Serializable;

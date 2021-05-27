@@ -43,7 +43,7 @@
     </div>
 </div>
 
-<form sec:authorize="hasAuthority('MANAGER')" action="#" th:action="@{'/requests/' + ${order.id}}"
+<form sec:authorize="hasAuthority('MANAGER')" action="#" th:action="@{'/requests/update/' + ${order.id}}"
       method="post">
     <p th:text="#{update.status} + ':'"></p>
     <select name="status" >

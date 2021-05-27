@@ -1,18 +1,16 @@
 package ua.training.restaurant.service.impl;
 
-import ua.training.restaurant.dto.DishDto;
-import ua.training.restaurant.entities.Dish;
-import ua.training.restaurant.repository.DishRepository;
-import ua.training.restaurant.service.CategoryService;
-import ua.training.restaurant.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import ua.training.restaurant.dto.DishDto;
+import ua.training.restaurant.entities.Dish;
+import ua.training.restaurant.repository.DishRepository;
+import ua.training.restaurant.service.CategoryService;
+import ua.training.restaurant.service.DishService;
 
 @Service
 public class DishServiceImpl implements DishService {
@@ -24,12 +22,6 @@ public class DishServiceImpl implements DishService {
     private CategoryService categoryService;
 
     private static final int LIMIT = 12;
-
-    @Override
-    public Page<Dish> findAll(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo - 1, LIMIT);
-        return dishRepository.findAll(pageable);
-    }
 
     @Override
     public Page<Dish> findAll(int pageNo, String orderBy, String category) {
@@ -49,11 +41,6 @@ public class DishServiceImpl implements DishService {
         Pageable pageable = PageRequest.of(pageNo - 1, LIMIT, Sort.by(orderBy));
         return dishRepository.findAllByCategory(
                 categoryService.findById(Integer.parseInt(category)).orElseThrow(RuntimeException::new), pageable);
-    }
-
-    @Override
-    public Optional<Dish> findById(Integer id) {
-        return dishRepository.findById(id);
     }
 
     @Override

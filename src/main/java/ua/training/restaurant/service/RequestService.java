@@ -20,7 +20,7 @@ public interface RequestService {
     Request checkout(User user, String deliveryAddress) throws RequestNotFoundException,
             EmptyRequestException;
 
-    Request updateRequestStatus(User manager, Request request, Status status);
+    void updateRequestStatus(User manager, Request request, Status status);
 
     Request save(Request request);
 }
