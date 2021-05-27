@@ -74,9 +74,8 @@ button:hover {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: url('../images/main-banner.jpeg');
     background-size: cover;
-    background-position: center;
+    background: url('../images/main-banner.jpeg') center;
 }
 
 h1 {

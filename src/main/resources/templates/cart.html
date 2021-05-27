@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title}"></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link th:href="@{/styles/style.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/add-dish.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<header th:insert="navigation :: header"></header>
+<div class="cart_container" th:each="requestItem : ${request.requestItems}">
+    <div class="dish">
+        <form action="#" th:action="@{/cart/${requestItem.id}}" th:method="delete">
+            <div class="menu_img">
+                <button type="submit" class="delete_icon">X</button>
+                <img th:src="${requestItem.dish.imagePath}">
+            </div>
+        </form>
+        <div class="details">
+            <a th:href="@{/menu/dish/${requestItem.dish.id}}">
+                <h2 th:text="${#locale eq 'ukr' ? requestItem.dish.nameUkr : requestItem.dish.name}"></h2>
+            </a>
+            <b th:text="#{quantity}">: </b>
+            <span class="counter">
+                <a th:href="@{/cart/decreaseQuantity/${requestItem.id}}">
+                    <b class="change_button" id="minus"> - </b>
+                </a>
+                <b id="counter" th:text="${requestItem.quantity}"></b>
+                <a th:href="@{/cart/add/${requestItem.id}}">
+                    <b class="change_button" id="plus"> + </b>
+                </a>
+            </span>
+        </div>
+        <div class="price">
+            <h3 class="item_price" th:text="${requestItem.price/100}"></h3>
+            <h3 class="currency" th:text="#{currency}"></h3>
+        </div>
+    </div>
+    </c:forEach>
+    <div class="total">
+        <div>
+            <b id="total" th:text="#{total} + ':'"></b>
+            <b id="sum" th:text="${request.totalPrice}"></b>
+            <b th:text="#{currency}"></b>
+        </div>
+        <form action="/checkout" class="checkout" method="get">
+            <button type="submit" th:text="#{checkout}"></button>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title}"></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link th:href="@{/styles/style.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<header th:insert="navigation :: header"></header>
+
+<div class="content">
+    <div class="main_banner">
+        <h1 th:text="#{restaurant.name}"></h1>
+        <p th:text="#{restaurant.desc}"></p>
+    </div>
+    <a name="menu"></a>
+    <div class="menu">
+        <div class="options">
+            <div class="dropdown">
+                <button class="dropbtn" th:text="#{order.by}"></button>
+                <div class="dropdown-content">
+                    <a th:href="@{'/menu?orderBy=price#menu'}" th:text="#{price}"></a>
+                    <a th:href="@{'/menu?orderBy=category#menu'}" th:text="#{category}"></a>
+                    <a th:href="@{'/menu?orderBy=' + ${#locale.toString()=='ukr' ? 'nameUkr' : 'name'} + '#menu'}"
+                       th:text="#{name}">
+                    </a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn" th:text="#{category}"></button>
+                <div class="dropdown-content">
+                    <a th:href="@{/menu#menu}" th:text="#{all}"></a>
+                    <a th:each="c : ${categories}"
+                       th:href="@{/menu#menu(category=${c.id})}"
+                       th:text="${#locale.toString()} == 'ukr' ? ${c.nameUkr} : ${c.name}">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="menu_items">
+            <div class="menu_item" th:each="d : ${dishes}">
+                <div class="menu_img">
+                    <a th:href="@{'/menu/dish/' + ${d.id}}">
+                        <img th:src="${d.imagePath}">
+                    </a>
+                </div>
+                <a th:href="@{'/menu/dish/' + ${d.id}}">
+                    <h3 th:text="${#locale.toString()} == 'ukr' ? ${d.nameUkr} : ${d.name}"></h3>
+                </a>
+                <p th:text="${#locale.toString()} == 'ukr' ? ${d.descriptionUkr} : ${d.description}"></p>
+                <h4 th:text="|${d.price/100} #{currency}|"></h4>
+            </div>
+        </div>
+        <div th:if="${page.totalPages > 1}" class="pagination">
+            <a th:each="i : ${#numbers.sequence(1, page.totalPages)}" th:text="${i}"
+               th:href="@{'/menu?pageNo=' + ${i} + '&orderBy=' + ${orderBy} + '&category=' + ${category} + '#menu'}">
+            </a>
+        </div>
+        </c:if>
+    </div>
+</div>
+
+</body>
+</html>

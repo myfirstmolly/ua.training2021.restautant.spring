@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title}"></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link th:href="@{/styles/style.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/dish.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<header th:insert="navigation :: header"></header>
+
+<div class="content">
+    <div class="dish">
+        <div class="menu_img">
+            <img th:src="${dish.imagePath}">
+        </div>
+        <div class="dish_description">
+            <h3 th:text="${#locale.toString()} == 'ukr' ? ${dish.nameUkr} : ${dish.name}"></h3>
+            <div class="desc">
+                <p th:text="${#locale.toString()} == 'ukr' ? ${dish.descriptionUkr} : ${dish.description}"></p>
+            </div>
+            <h4 th:text="|${dish.price/100} #{currency}|"></h4>
+
+            <button sec:authorize="hasAuthority('CUSTOMER')" type="submit" th:href="@{/cart/add/${dish.id}}"
+                    th:text="#{add.to.cart}">
+            </button>
+            <form sec:authorize="hasAuthority('MANAGER')" th:method="delete" th:action="@{/menu/delete/${dish.id}}">
+                <button th:text="#{delete}"></button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

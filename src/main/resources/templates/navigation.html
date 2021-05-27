@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link th:href="@{/styles/style.css}" rel="stylesheet"/>
+</head>
+
+<header th:fragment="header">
+    <nav>
+        <ul class="nav_links">
+            <li>
+                <a th:href="@{/menu#menu}" th:text="#{menu}"></a>
+            </li>
+            <li sec:authorize="hasAuthority('CUSTOMER')">
+                <a th:href="@{/cart}" th:text="#{cart}"></a>
+            </li>
+            <li sec:authorize="hasAuthority('CUSTOMER')">
+                <a th:href="@{/requests}" th:text="#{my.orders}"></a>
+            </li>
+            <li sec:authorize="hasAuthority('MANAGER')">
+                <a th:href="@{/menu/add}" th:text="#{add.dish}"></a>
+            </li>
+            <li sec:authorize="hasAuthority('MANAGER')">
+                <a th:href="@{/requests}" th:text="#{orders}"></a>
+            </li>
+            <li>
+                <a th:href="@{''(lang=#{language.code})}" th:text="#{language}"></a>
+            </li>
+        </ul>
+    </nav>
+    <a sec:authorize="isAuthenticated()" th:href="@{/logout}">
+        <button th:text="#{logout}"></button>
+    </a>
+    <a sec:authorize="isAnonymous()" th:href="@{/login.html}">
+        <button th:text="#{login}"></button>
+    </a>
+</header>
+</html>

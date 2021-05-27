@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title th:text="#{title}"></title>
@@ -9,33 +9,40 @@
     <link th:href="@{/styles/style.css}" rel="stylesheet"/>
     <link th:href="@{/styles/add-dish.css}" rel="stylesheet"/>
 </head>
+
 <body>
-<header th:insert="navigation.html :: header"></header>
+<header th:insert="navigation :: header"></header>
 <div class="content">
     <h1 th:text="#{add.dish}"></h1>
-    <form class="dish" action="api" method="POST">
-        <input type="hidden" name="command" value="addDish">
-        <input class="text" type="text" name="name" placeholder="Dish name...">
-        <p class="warning" th:text="#{}"></p>
-        <input class="text" type="text" name="nameUkr" placeholder="Назва страви...">
-        <p class="warning">${nameUkrMsg}</p>
-        <input class="text" type="text" name="imagePath" placeholder="google.com/image-link/">
-        <p class="warning">${imageMsg}</p>
-        <textarea name="description" rows="20" placeholder="Dish description"></textarea>
-        <textarea name="descriptionUkr" rows="20" placeholder="Опис страви..."></textarea>
-        <b>${price}
-            <input class="price" type="text" name="price" placeholder="80.00">
-            ${currency}
-        </b>
-        <p class="warning">${priceMsg}</p>
-        <b>${category}
-            <select name="category">
-                <c:forEach var="category" items="${categories}">
-                    <option value="${category.id}">${category.name}</option>
-                </c:forEach>
+    <form class="dish" action="#" th:action="@{/menu/add}" th:object="${dishDto}" method="POST">
+
+        <input class="text" type="text" th:field="*{name}" placeholder="Dish name...">
+        <p class="warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+
+        <input class="text" type="text" th:field="*{nameUkr}" placeholder="Назва страви...">
+        <p class="warning" th:if="${#fields.hasErrors('nameUkr')}" th:errors="*{nameUkr}"></p>
+
+        <input class="text" type="text" th:field="*{imagePath}" placeholder="google.com/image-link/">
+        <p class="warning" th:if="${#fields.hasErrors('nameUkr')}" th:errors="*{imagePath}"></p>
+
+        <textarea th:field="*{description}" rows="20" placeholder="Dish description"></textarea>
+        <p class="warning" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+
+        <textarea th:field="*{descriptionUkr}" rows="20" placeholder="Опис страви..."></textarea>
+        <p class="warning" th:if="${#fields.hasErrors('descriptionUkr')}" th:errors="*{descriptionUkr}"></p>
+
+        <b th:text="#{price}"></b>
+            <input class="price" type="text" th:field="*{descriptionUkr}" placeholder="80.00">
+        <b th:text="#{currency}"></b>
+        <p class="warning" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+
+        <b th:text="#{category}">
+            <select th:each="category : ${categories}" name="category">
+                <option th:if="${#locale eq 'ukr'}" th:field="*{category}" th:value="${category}"
+                th:text="${#locale eq 'ukr' ? category.nameUkr : category.name}"></option>
             </select>
         </b>
-        <button type="submit">${save}</button>
+        <button type="submit" th:text="#{save}"></button>
     </form>
 </div>
 </body>
