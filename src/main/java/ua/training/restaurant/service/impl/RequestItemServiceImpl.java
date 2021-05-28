@@ -4,13 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.training.restaurant.entities.Dish;
-import ua.training.restaurant.entities.Request;
-import ua.training.restaurant.entities.RequestItem;
-import ua.training.restaurant.entities.User;
+import ua.training.restaurant.entities.*;
 import ua.training.restaurant.repository.RequestItemRepository;
+import ua.training.restaurant.repository.RequestRepository;
 import ua.training.restaurant.service.RequestItemService;
-import ua.training.restaurant.service.RequestService;
 
 @Service
 @Slf4j
@@ -20,34 +17,29 @@ public class RequestItemServiceImpl implements RequestItemService {
     private RequestItemRepository requestItemRepository;
 
     @Autowired
-    private RequestService requestService;
+    private RequestRepository requestRepository;
 
     @Override
     @Transactional
     public void addItem(Dish dish, User user) {
-        Request request = requestService.findRequestInCart(user);
-
         RequestItem requestItem = requestItemRepository
-                .findFirstByRequestAndDish(request, dish)
+                .findFirstByUserAndStatusAndDish(user, Status.OPENED, dish)
                 .orElse(RequestItem.builder()
-                        .request(request)
+                        .request(findRequestInCart(user))
                         .quantity(0)
-                        .price(dish.getPrice())
                         .dish(dish)
                         .build());
 
         int quantity = requestItem.getQuantity() + 1;
         requestItem.setQuantity(quantity);
         requestItemRepository.save(requestItem);
-        requestService.save(request);
     }
 
     @Override
     @Transactional
     public void decreaseQuantity(Dish dish, User user) {
-        Request request = requestService.findRequestInCart(user);
         requestItemRepository
-                .findFirstByRequestAndDish(request, dish)
+                .findFirstByUserAndStatusAndDish(user, Status.OPENED, dish)
                 .ifPresent(i -> {
                     if (i.getQuantity() > 1) {
                         i.setQuantity(i.getQuantity() - 1);
@@ -59,10 +51,24 @@ public class RequestItemServiceImpl implements RequestItemService {
     }
 
     @Override
+    @Transactional
     public void removeItem(Dish dish, User user) {
-        Request request = requestService.findRequestInCart(user);
         requestItemRepository
-                .findFirstByRequest(request)
+                .findFirstByUserAndStatusAndDish(user, Status.OPENED, dish)
                 .ifPresent(i -> requestItemRepository.delete(i));
     }
+
+    private Request findRequestInCart(User user) {
+        return requestRepository
+                .findFirstByUserAndStatus(user, Status.OPENED)
+                .orElseGet(() -> {
+                    Request r = Request.builder()
+                            .user(user)
+                            .status(Status.OPENED)
+                            .build();
+                    requestRepository.save(r);
+                    return r;
+                });
+    }
+
 }

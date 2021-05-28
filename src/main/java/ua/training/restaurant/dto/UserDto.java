@@ -24,7 +24,7 @@ public class UserDto implements Serializable {
 
     @NotNull(message = "{user.name.notnull}")
     @Size(min = 3, max = 32, message = "{user.name.length}")
-    @Pattern(regexp = "\\p{Lu}\\p{L}+", message = "{user.name.characters}")
+    @Pattern(regexp = "\\p{Lu}[\\p{L}\\s]+", message = "{user.name.characters}")
     private String name;
 
     @NotNull(message = "{phone.notnull}")

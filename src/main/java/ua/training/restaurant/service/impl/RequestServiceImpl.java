@@ -42,19 +42,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    @Transactional
-    public Request findRequestInCart(User user) {
-        return requestRepository
-                .findFirstByUserAndStatus(user, Status.OPENED)
-                .orElseGet(() -> {
-                    Request r = Request.builder()
-                            .user(user)
-                            .totalPrice(0L)
-                            .build();
-                    r.setStatus(Status.OPENED);
-                    requestRepository.save(r);
-                    return r;
-                });
+    public Optional<Request> findRequestInCart(User user) {
+        return requestRepository.findFirstByUserAndStatus(user, Status.OPENED);
     }
 
     @Override

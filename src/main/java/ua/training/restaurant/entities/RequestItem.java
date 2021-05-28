@@ -32,8 +32,7 @@ public final class RequestItem {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "price")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "price", insertable = false)
     private int price;
 
 }

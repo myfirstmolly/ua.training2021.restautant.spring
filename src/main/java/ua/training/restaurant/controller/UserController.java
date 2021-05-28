@@ -10,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.training.restaurant.dto.UserDto;
 import ua.training.restaurant.service.UserService;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
@@ -32,7 +34,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") UserDto user, BindingResult result, Model model) {
+    public String register(@Valid @ModelAttribute("user") UserDto user, BindingResult result,
+                           Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             return "register";
         }
@@ -41,7 +44,14 @@ public class UserController {
             return "register";
         }
         userService.save(user);
-        return "redirect:/menu";
+        try {
+            request.login(user.getUsername(), user.getPassword());
+            log.info("authorized user {}", user.getUsername());
+            return "redirect:/menu";
+        } catch (ServletException e) {
+            log.warn("error while attempting to login user {}", user.getUsername());
+            return "redirect:/login";
+        }
     }
 
 }

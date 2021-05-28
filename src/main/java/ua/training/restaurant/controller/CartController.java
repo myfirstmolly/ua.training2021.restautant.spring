@@ -12,6 +12,8 @@ import ua.training.restaurant.entities.User;
 import ua.training.restaurant.service.RequestItemService;
 import ua.training.restaurant.service.RequestService;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/cart")
 @Slf4j
@@ -25,15 +27,22 @@ public class CartController {
 
     @GetMapping
     public String getCart(Model model, @AuthenticationPrincipal User user) {
-        Request request = requestService.findRequestInCart(user);
-        model.addAttribute("request", request);
+        requestService.findRequestInCart(user)
+                .ifPresent((req -> {
+                    if (!req.getRequestItems().isEmpty())
+                        model.addAttribute("request", req);
+                }));
         return "cart";
     }
 
     @GetMapping("/checkout")
     public String goToCheckout(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute(requestService.findRequestInCart(user));
-        return "checkout-form";
+        Optional<Request> request = requestService.findRequestInCart(user);
+        if (request.isPresent() && !request.get().getRequestItems().isEmpty()) {
+            model.addAttribute(request.get());
+            return "checkout-form";
+        }
+        return "redirect:/menu";
     }
 
     @PostMapping("/add/{dish}")
@@ -60,7 +69,7 @@ public class CartController {
     @PostMapping(value = "/checkout")
     public String checkout(@RequestParam String deliveryAddress, @AuthenticationPrincipal User user) {
         requestService.checkout(user, deliveryAddress);
-        return "redirect:/cart";
+        return "redirect:/requests";
     }
 
     @PostMapping(value = "/delete/{dish}")

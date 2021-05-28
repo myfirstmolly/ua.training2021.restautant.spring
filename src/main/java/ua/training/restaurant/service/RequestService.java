@@ -15,7 +15,7 @@ public interface RequestService {
 
     Optional<Request> findById(Integer id);
 
-    Request findRequestInCart(User user);
+    Optional<Request> findRequestInCart(User user);
 
     Request checkout(User user, String deliveryAddress) throws RequestNotFoundException,
             EmptyRequestException;

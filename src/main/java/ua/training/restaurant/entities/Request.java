@@ -35,8 +35,7 @@ public final class Request implements Serializable {
     @Size(min = 6, max = 128, message = "{request.delivery.size}")
     private String deliveryAddress;
 
-    @Column(name = "total_price")
-    @GeneratedValue
+    @Column(name = "total_price", insertable = false)
     private Long totalPrice;
 
     @ManyToOne(fetch = FetchType.EAGER)
