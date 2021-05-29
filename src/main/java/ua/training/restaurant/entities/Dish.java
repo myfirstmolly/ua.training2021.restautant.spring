@@ -22,22 +22,22 @@ public final class Dish implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", unique = true, nullable = false, length = 32)
     private String name;
 
-    @Column(name = "name_ukr", nullable = false)
+    @Column(name = "name_ukr", unique = true, nullable = false, length = 32)
     private String nameUkr;
 
     @Column(name = "price", nullable = false)
     private int price;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 2048)
     private String description;
 
-    @Column(name = "description_ukr")
+    @Column(name = "description_ukr", length = 2048)
     private String descriptionUkr;
 
-    @Column(name = "image_path", nullable = false)
+    @Column(name = "image_path", nullable = false, length = 300)
     private String imagePath;
 
     @ManyToOne(fetch = FetchType.EAGER)

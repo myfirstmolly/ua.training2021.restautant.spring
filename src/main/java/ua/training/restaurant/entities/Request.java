@@ -31,7 +31,7 @@ public final class Request implements Serializable {
     @Column(name = "status_id", nullable = false)
     private Status status;
 
-    @Column(name = "delivery_address")
+    @Column(name = "delivery_address", length = 128)
     @Size(min = 6, max = 128, message = "{request.delivery.size}")
     private String deliveryAddress;
 

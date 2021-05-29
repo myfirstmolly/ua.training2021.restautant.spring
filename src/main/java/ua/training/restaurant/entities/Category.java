@@ -20,10 +20,10 @@ public final class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", unique = true, nullable = false, length = 32)
     private String name;
 
-    @Column(name = "name_ukr", nullable = false)
+    @Column(name = "name_ukr", unique = true, nullable = false, length = 32)
     private String nameUkr;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
