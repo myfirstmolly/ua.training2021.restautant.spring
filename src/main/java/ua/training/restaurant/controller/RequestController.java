@@ -7,7 +7,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ua.training.restaurant.dto.RequestDto;
 import ua.training.restaurant.entities.Request;
 import ua.training.restaurant.entities.Status;
 import ua.training.restaurant.entities.User;
@@ -47,7 +46,6 @@ public class RequestController {
         Request request = requestService.findById(id).orElseThrow(RequestNotFoundException::new);
         model.addAttribute("order", request);
         model.addAttribute("statusList", Status.getSublist(request.getStatus().getId() + 1));
-        model.addAttribute("requestDto", new RequestDto());
         return "order";
     }
 

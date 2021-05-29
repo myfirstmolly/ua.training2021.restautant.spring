@@ -33,16 +33,10 @@ public class MenuController {
                        @RequestParam(required = false) Optional<Category> category,
                        Model model) {
         model.addAttribute("orderBy", orderBy);
-        category.ifPresentOrElse((c -> {
-            Page<Dish> dishPage = dishService.findAll(pageNo, orderBy, c);
-            model.addAttribute("dishes", dishPage.getContent());
-            model.addAttribute("page", dishPage);
-            model.addAttribute("category", c);
-        }), () -> {
-            Page<Dish> dishPage = dishService.findAll(pageNo, orderBy);
-            model.addAttribute("dishes", dishPage.getContent());
-            model.addAttribute("page", dishPage);
-        });
+        category.ifPresent(c -> model.addAttribute("category", c));
+        Page<Dish> dishPage = dishService.findAll(pageNo, orderBy, category);
+        model.addAttribute("dishes", dishPage.getContent());
+        model.addAttribute("page", dishPage);
         model.addAttribute("categories", categoryService.findAll());
         return "index";
     }

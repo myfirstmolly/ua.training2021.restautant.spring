@@ -16,10 +16,12 @@ public class DishDto implements Serializable {
 
     @NotNull(message = "{dish.name.blank}")
     @NotBlank(message = "{dish.name.blank}")
+    @Size(max = 32, min = 4, message = "{dish.name.length}")
     private String name;
 
     @NotNull(message = "{dish.name.blank}")
     @NotBlank(message = "{dish.name.blank}")
+    @Size(max = 32, min = 4, message = "{dish.name.length}")
     private String nameUkr;
 
     @Pattern(regexp = "([0-9]{2,5}\\.[0-9]{2})", message = "{dish.price.incorrect}")

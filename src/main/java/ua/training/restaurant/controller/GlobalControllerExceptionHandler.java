@@ -1,5 +1,6 @@
 package ua.training.restaurant.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -13,12 +14,14 @@ import ua.training.restaurant.exceptions.RequestNotFoundException;
 
 @ControllerAdvice
 @Controller
+@Slf4j
 public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public String defaultErrorHandler(Exception e) throws Exception {
         if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null)
             throw e;
+        log.error("exception occurred during application execution: ", e);
         return "redirect:/menu";
     }
 

@@ -12,6 +12,8 @@ import ua.training.restaurant.entities.Dish;
 import ua.training.restaurant.repository.DishRepository;
 import ua.training.restaurant.service.DishService;
 
+import java.util.Optional;
+
 @Service
 public class DishServiceImpl implements DishService {
 
@@ -21,24 +23,23 @@ public class DishServiceImpl implements DishService {
     private static final int LIMIT = 12;
 
     @Override
-    public Page<Dish> findAll(int pageNo, String orderBy) {
+    public Page<Dish> findAll(int pageNo, String orderBy, Optional<Category> category) {
+        if (category.isPresent()) {
+            Pageable pageable = PageRequest.of(pageNo - 1, LIMIT, Sort.by(orderBy));
+            return dishRepository.findAllByCategory(category.get(), pageable);
+        }
         Pageable pageable = PageRequest.of(pageNo - 1, LIMIT, Sort.by(orderBy));
         return dishRepository.findAll(pageable);
     }
 
     @Override
-    public Page<Dish> findAll(int pageNo, String orderBy, Category category) {
-        Pageable pageable = PageRequest.of(pageNo - 1, LIMIT, Sort.by(orderBy));
-        return dishRepository.findAllByCategory(category, pageable);
-    }
-
-    @Override
     public Dish saveDish(DishDto dish) {
         int price;
-        if (dish.getPrice().contains("."))
+        if (dish.getPrice().contains(".")) {
             price = Integer.parseInt(dish.getPrice().replace(".", ""));
-        else
+        } else {
             price = Integer.parseInt(dish.getPrice()) * 100;
+        }
         Dish d = Dish.builder()
                 .name(dish.getName())
                 .nameUkr(dish.getNameUkr())
