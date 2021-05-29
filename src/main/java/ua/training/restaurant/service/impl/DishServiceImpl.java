@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ua.training.restaurant.dto.DishDto;
+import ua.training.restaurant.entities.Category;
 import ua.training.restaurant.entities.Dish;
 import ua.training.restaurant.repository.DishRepository;
-import ua.training.restaurant.service.CategoryService;
 import ua.training.restaurant.service.DishService;
 
 @Service
@@ -18,29 +18,18 @@ public class DishServiceImpl implements DishService {
     @Autowired
     private DishRepository dishRepository;
 
-    @Autowired
-    private CategoryService categoryService;
-
     private static final int LIMIT = 12;
 
     @Override
-    public Page<Dish> findAll(int pageNo, String orderBy, String category) {
-        if (category.equals("all")) {
-            if (orderBy.equals("id")) {
-                Pageable pageable = PageRequest.of(pageNo - 1, LIMIT);
-                return dishRepository.findAll(pageable);
-            }
-            Pageable pageable = PageRequest.of(pageNo - 1, LIMIT, Sort.by(orderBy));
-            return dishRepository.findAll(pageable);
-        }
-        if (orderBy.equals("id")) {
-            Pageable pageable = PageRequest.of(pageNo - 1, LIMIT);
-            return dishRepository.findAllByCategory(
-                    categoryService.findById(Integer.parseInt(category)).orElseThrow(RuntimeException::new), pageable);
-        }
+    public Page<Dish> findAll(int pageNo, String orderBy) {
         Pageable pageable = PageRequest.of(pageNo - 1, LIMIT, Sort.by(orderBy));
-        return dishRepository.findAllByCategory(
-                categoryService.findById(Integer.parseInt(category)).orElseThrow(RuntimeException::new), pageable);
+        return dishRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Dish> findAll(int pageNo, String orderBy, Category category) {
+        Pageable pageable = PageRequest.of(pageNo - 1, LIMIT, Sort.by(orderBy));
+        return dishRepository.findAllByCategory(category, pageable);
     }
 
     @Override

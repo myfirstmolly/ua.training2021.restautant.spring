@@ -56,7 +56,9 @@
             </div>
         </div>
         <div th:if="${page.totalPages > 1}" class="pagination">
-            <a th:each="i : ${#numbers.sequence(1, page.totalPages)}" th:text="${i}"
+            <a th:if="${category == null}" th:each="i : ${#numbers.sequence(1, page.totalPages)}" th:text="${i}"
+               th:href="@{'/menu?pageNo=' + ${i} + '&orderBy=' + ${orderBy} + '#menu'}">
+            <a th:unless="${category == null}" th:each="i : ${#numbers.sequence(1, page.totalPages)}" th:text="${i}"
                th:href="@{'/menu?pageNo=' + ${i} + '&orderBy=' + ${orderBy} + '&category=' + ${category} + '#menu'}">
             </a>
         </div>

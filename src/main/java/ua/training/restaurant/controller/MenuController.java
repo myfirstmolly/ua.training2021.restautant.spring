@@ -8,16 +8,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.training.restaurant.dto.DishDto;
+import ua.training.restaurant.entities.Category;
 import ua.training.restaurant.entities.Dish;
 import ua.training.restaurant.service.CategoryService;
 import ua.training.restaurant.service.DishService;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/menu")
 @Slf4j
-public class DishController {
+public class MenuController {
 
     @Autowired
     private DishService dishService;
@@ -28,14 +30,20 @@ public class DishController {
     @GetMapping
     public String menu(@RequestParam(defaultValue = "1") Integer pageNo,
                        @RequestParam(defaultValue = "id", required = false) String orderBy,
-                       @RequestParam(defaultValue = "all", required = false) String category,
+                       @RequestParam(required = false) Optional<Category> category,
                        Model model) {
         model.addAttribute("orderBy", orderBy);
-        model.addAttribute("category", category);
-        Page<Dish> dishPage = dishService.findAll(pageNo, orderBy, category);
+        category.ifPresentOrElse((c -> {
+            Page<Dish> dishPage = dishService.findAll(pageNo, orderBy, c);
+            model.addAttribute("dishes", dishPage.getContent());
+            model.addAttribute("page", dishPage);
+            model.addAttribute("category", c);
+        }), () -> {
+            Page<Dish> dishPage = dishService.findAll(pageNo, orderBy);
+            model.addAttribute("dishes", dishPage.getContent());
+            model.addAttribute("page", dishPage);
+        });
         model.addAttribute("categories", categoryService.findAll());
-        model.addAttribute("dishes", dishPage.getContent());
-        model.addAttribute("page", dishPage);
         return "index";
     }
 
