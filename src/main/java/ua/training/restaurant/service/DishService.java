@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import ua.training.restaurant.dto.DishDto;
 import ua.training.restaurant.entities.Category;
 import ua.training.restaurant.entities.Dish;
+import ua.training.restaurant.exceptions.DishIsOrderedException;
 
 import java.util.Optional;
 
@@ -13,6 +14,6 @@ public interface DishService {
 
     Dish saveDish(DishDto dish);
 
-    void deleteDish(Integer id);
+    void deleteDish(Dish dish) throws DishIsOrderedException;
 
 }

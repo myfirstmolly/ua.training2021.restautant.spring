@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ua.training.restaurant.dto.DishDto;
 import ua.training.restaurant.entities.Category;
 import ua.training.restaurant.entities.Dish;
+import ua.training.restaurant.exceptions.DishIsOrderedException;
 import ua.training.restaurant.repository.DishRepository;
 import ua.training.restaurant.service.DishService;
 
@@ -53,7 +54,11 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public void deleteDish(Integer dish) {
-        dishRepository.deleteById(dish);
+    public void deleteDish(Dish dish) throws DishIsOrderedException {
+        try {
+            dishRepository.delete(dish);
+        } catch (Exception ex) {
+            throw new DishIsOrderedException();
+        }
     }
 }

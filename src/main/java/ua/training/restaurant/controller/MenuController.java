@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.training.restaurant.dto.DishDto;
 import ua.training.restaurant.entities.Category;
 import ua.training.restaurant.entities.Dish;
+import ua.training.restaurant.exceptions.DishIsOrderedException;
 import ua.training.restaurant.service.CategoryService;
 import ua.training.restaurant.service.DishService;
 
@@ -64,9 +65,15 @@ public class MenuController {
         return "redirect:/menu/dish/" + dishService.saveDish(dish).getId();
     }
 
-    @PostMapping(value = "/delete/{id}")
-    public String deleteDish(@PathVariable Integer id) {
-        dishService.deleteDish(id);
-        return "redirect:/menu";
+    @PostMapping(value = "/delete/{dish}")
+    public String deleteDish(@PathVariable Dish dish, Model model) {
+        try {
+            dishService.deleteDish(dish);
+            return "redirect:/menu";
+        } catch (DishIsOrderedException ex) {
+            model.addAttribute("dish", dish);
+            model.addAttribute("deleteError", true);
+            return "dish";
+        }
     }
 }

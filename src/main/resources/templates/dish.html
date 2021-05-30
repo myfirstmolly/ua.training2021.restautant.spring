@@ -35,6 +35,7 @@
                   th:action="@{'/menu/delete/' + ${dish.id}}">
                 <button th:text="#{delete}"></button>
             </form>
+            <p class="warning" th:if="${deleteError == true}" th:text="#{dish.delete.error}"></p>
         </div>
     </div>
 </div>
