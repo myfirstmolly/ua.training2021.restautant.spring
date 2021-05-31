@@ -10,6 +10,7 @@ import ua.training.restaurant.dto.DishDto;
 import ua.training.restaurant.entities.Category;
 import ua.training.restaurant.entities.Dish;
 import ua.training.restaurant.exceptions.DishIsOrderedException;
+import ua.training.restaurant.exceptions.DishNotFoundException;
 import ua.training.restaurant.repository.DishRepository;
 import ua.training.restaurant.service.DishService;
 
@@ -31,6 +32,11 @@ public class DishServiceImpl implements DishService {
         }
         Pageable pageable = PageRequest.of(pageNo - 1, LIMIT, Sort.by(orderBy));
         return dishRepository.findAll(pageable);
+    }
+
+    @Override
+    public Dish findById(Integer id) {
+        return dishRepository.findById(id).orElseThrow(DishNotFoundException::new);
     }
 
     @Override

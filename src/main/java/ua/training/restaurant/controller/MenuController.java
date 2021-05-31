@@ -42,9 +42,9 @@ public class MenuController {
         return "index";
     }
 
-    @GetMapping(value = "/dish/{dish}")
-    public String getDish(@PathVariable Dish dish, Model model) {
-        model.addAttribute("dish", dish);
+    @GetMapping(value = "/dish/{dishId}")
+    public String getDish(@PathVariable Integer dishId, Model model) {
+        model.addAttribute("dish", dishService.findById(dishId));
         return "dish";
     }
 

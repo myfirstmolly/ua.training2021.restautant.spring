@@ -12,6 +12,8 @@ public interface DishService {
 
     Page<Dish> findAll(int pageNo, String orderBy, Optional<Category> category);
 
+    Dish findById(Integer id);
+
     Dish saveDish(DishDto dish);
 
     void deleteDish(Dish dish) throws DishIsOrderedException;

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import ua.training.restaurant.exceptions.DishNotFoundException;
 import ua.training.restaurant.exceptions.EmptyRequestException;
 import ua.training.restaurant.exceptions.EmptyStatusException;
 import ua.training.restaurant.exceptions.RequestNotFoundException;
@@ -45,6 +46,14 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleRequestNotFoundException(Model model) {
         model.addAttribute("errorMessage", "this order is not found");
+        model.addAttribute("status", "NOT FOUND");
+        return "error";
+    }
+
+    @ExceptionHandler(DishNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleDishNotFoundException(Model model) {
+        model.addAttribute("errorMessage", "this dish is not found");
         model.addAttribute("status", "NOT FOUND");
         return "error";
     }
