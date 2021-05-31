@@ -3,6 +3,7 @@ package ua.training.restaurant.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.training.restaurant.entities.*;
 import ua.training.restaurant.repository.RequestItemRepository;
@@ -20,8 +21,8 @@ public class RequestItemServiceImpl implements RequestItemService {
     private RequestRepository requestRepository;
 
     @Override
-    @Transactional
-    public void addItem(Dish dish, User user) {
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public RequestItem addItem(Dish dish, User user) {
         RequestItem requestItem = requestItemRepository
                 .findFirstByUserAndStatusAndDish(user, Status.OPENED, dish)
                 .orElse(RequestItem.builder()
@@ -30,13 +31,12 @@ public class RequestItemServiceImpl implements RequestItemService {
                         .dish(dish)
                         .build());
 
-        int quantity = requestItem.getQuantity() + 1;
-        requestItem.setQuantity(quantity);
-        requestItemRepository.save(requestItem);
+        requestItem.setQuantity(requestItem.getQuantity() + 1);
+        return requestItemRepository.save(requestItem);
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void decreaseQuantity(Dish dish, User user) {
         requestItemRepository
                 .findFirstByUserAndStatusAndDish(user, Status.OPENED, dish)
@@ -51,7 +51,7 @@ public class RequestItemServiceImpl implements RequestItemService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void removeItem(Dish dish, User user) {
         requestItemRepository
                 .findFirstByUserAndStatusAndDish(user, Status.OPENED, dish)
@@ -61,14 +61,7 @@ public class RequestItemServiceImpl implements RequestItemService {
     private Request findRequestInCart(User user) {
         return requestRepository
                 .findFirstByUserAndStatus(user, Status.OPENED)
-                .orElseGet(() -> {
-                    Request r = Request.builder()
-                            .user(user)
-                            .status(Status.OPENED)
-                            .build();
-                    requestRepository.save(r);
-                    return r;
-                });
+                .orElseGet(() -> requestRepository.save(Request.builder().user(user).status(Status.OPENED).build()));
     }
 
 }

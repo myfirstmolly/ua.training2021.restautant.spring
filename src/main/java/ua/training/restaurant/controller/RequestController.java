@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import ua.training.restaurant.entities.Request;
 import ua.training.restaurant.entities.Status;
 import ua.training.restaurant.entities.User;
-import ua.training.restaurant.exceptions.EmptyRequestException;
-import ua.training.restaurant.exceptions.EmptyStatusException;
 import ua.training.restaurant.exceptions.RequestNotFoundException;
 import ua.training.restaurant.service.RequestService;
 
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
 @Controller
@@ -43,20 +42,17 @@ public class RequestController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable Integer id, Model model) {
-        Request request = requestService.findById(id).orElseThrow(RequestNotFoundException::new);
+        Request request = requestService.findById(id).orElseThrow(
+                () -> new RequestNotFoundException(String.format("order with id %s is not found", id)));
         model.addAttribute("order", request);
         model.addAttribute("statusList", Status.getSublist(request.getStatus().getId() + 1));
         return "order";
     }
 
     @PostMapping("/update/{request}")
-    public String setRequestStatus(@PathVariable Request request,
-                                   @RequestParam(name = "status", required = false) Status status,
+    public String setRequestStatus(@PathVariable @NotNull Request request,
+                                   @RequestParam(name = "status") Status status,
                                    @AuthenticationPrincipal User user) {
-
-        if (request == null) throw new EmptyRequestException();
-        if (status == null) throw new EmptyStatusException();
-
         requestService.updateRequestStatus(user, request, status);
         return "redirect:/requests/" + request.getId();
     }

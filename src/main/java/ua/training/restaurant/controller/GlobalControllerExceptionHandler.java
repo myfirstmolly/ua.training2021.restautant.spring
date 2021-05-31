@@ -26,35 +26,10 @@ public class GlobalControllerExceptionHandler {
         return "redirect:/menu";
     }
 
-    @ExceptionHandler(EmptyRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleEmptyRequestException(Model model) {
-        model.addAttribute("errorMessage", "order is empty");
-        model.addAttribute("status", "BAD REQUEST");
-        return "error";
-    }
-
-    @ExceptionHandler(EmptyStatusException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleEmptyStatusException(Model model) {
-        model.addAttribute("errorMessage", "status is empty");
-        model.addAttribute("status", "BAD REQUEST");
-        return "error";
-    }
-
-    @ExceptionHandler(RequestNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleRequestNotFoundException(Model model) {
-        model.addAttribute("errorMessage", "this order is not found");
-        model.addAttribute("status", "NOT FOUND");
-        return "error";
-    }
-
-    @ExceptionHandler(DishNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleDishNotFoundException(Model model) {
-        model.addAttribute("errorMessage", "this dish is not found");
-        model.addAttribute("status", "NOT FOUND");
+    @ExceptionHandler({EmptyStatusException.class, EmptyRequestException.class,
+            RequestNotFoundException.class, DishNotFoundException.class})
+    public String handleEmptyStatusException(Exception e, Model model) {
+        model.addAttribute("errorMessage", e.getMessage());
         return "error";
     }
 

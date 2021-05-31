@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.training.restaurant.entities.Request;
 import ua.training.restaurant.entities.Role;
@@ -47,15 +48,14 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    @Transactional
-    public Request checkout(User user, String deliveryAddress) throws RequestNotFoundException,
-            EmptyRequestException {
-
+    @Transactional(isolation = Isolation.READ_COMMITTED,
+            rollbackFor = { RequestNotFoundException.class, EmptyRequestException.class })
+    public Request checkout(User user, String deliveryAddress) throws RequestNotFoundException, EmptyRequestException {
         Request request = requestRepository.findFirstByUserAndStatus(user, Status.OPENED)
-                .orElseThrow(RequestNotFoundException::new);
+                .orElseThrow(() -> new RequestNotFoundException("order is not found"));
 
         if (request.getRequestItems().isEmpty())
-            throw new EmptyRequestException();
+            throw new EmptyRequestException("order is empty");
 
         request.setDeliveryAddress(deliveryAddress);
         request.setStatus(Status.PENDING);
@@ -63,11 +63,11 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void updateRequestStatus(User manager, Request request, Status status) {
+    public Request updateRequestStatus(User manager, Request request, Status status) {
         if (Status.COOKING.equals(status))
             request.setApprovedBy(manager);
         request.setStatus(status);
-        requestRepository.save(request);
+        return requestRepository.save(request);
     }
 
     @Override

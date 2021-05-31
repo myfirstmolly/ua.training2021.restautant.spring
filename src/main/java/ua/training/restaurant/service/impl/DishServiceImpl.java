@@ -36,17 +36,13 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public Dish findById(Integer id) {
-        return dishRepository.findById(id).orElseThrow(DishNotFoundException::new);
+        return dishRepository.findById(id).orElseThrow(
+                () -> new DishNotFoundException(String.format("dish with id %s is not found", id)));
     }
 
     @Override
     public Dish saveDish(DishDto dish) {
-        int price;
-        if (dish.getPrice().contains(".")) {
-            price = Integer.parseInt(dish.getPrice().replace(".", ""));
-        } else {
-            price = Integer.parseInt(dish.getPrice()) * 100;
-        }
+        int price = getPrice(dish);
         Dish d = Dish.builder()
                 .name(dish.getName())
                 .nameUkr(dish.getNameUkr())
@@ -66,5 +62,12 @@ public class DishServiceImpl implements DishService {
         } catch (Exception ex) {
             throw new DishIsOrderedException();
         }
+    }
+
+    private int getPrice(DishDto dish) {
+        if (dish.getPrice().contains(".")) {
+            return Integer.parseInt(dish.getPrice().replace(".", ""));
+        }
+        return Integer.parseInt(dish.getPrice()) * 100;
     }
 }

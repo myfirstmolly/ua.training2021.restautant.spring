@@ -31,11 +31,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/requests/*").authenticated()
                 .anyRequest().permitAll()
                 .and().formLogin()
-                    .loginPage("/login")
-                    .loginProcessingUrl("/login")
-                    .usernameParameter("username")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/menu").permitAll()
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/menu").permitAll()
                 .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler())
                 .and().logout().logoutSuccessUrl("/menu")
                 .and().csrf().disable();
@@ -47,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AccessDeniedHandler accessDeniedHandler(){
+    public AccessDeniedHandler accessDeniedHandler() {
         return new CustomAccessDeniedHandler();
     }
 

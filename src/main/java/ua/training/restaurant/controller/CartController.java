@@ -46,22 +46,19 @@ public class CartController {
     }
 
     @PostMapping("/add/{dish}")
-    public String addDishToCart(@PathVariable Dish dish,
-                                @AuthenticationPrincipal User user) {
+    public String addDishToCart(@PathVariable Dish dish, @AuthenticationPrincipal User user) {
         requestItemService.addItem(dish, user);
         return "redirect:/menu/dish/" + dish.getId();
     }
 
     @GetMapping(value = "/decreaseQuantity/{dish}")
-    public String decreaseDishQuantity(@PathVariable Dish dish,
-                                       @AuthenticationPrincipal User user) {
+    public String decreaseDishQuantity(@PathVariable Dish dish, @AuthenticationPrincipal User user) {
         requestItemService.decreaseQuantity(dish, user);
         return "redirect:/cart";
     }
 
     @GetMapping(value = "/increaseQuantity/{dish}")
-    public String increaseDishQuantity(@PathVariable Dish dish,
-                                       @AuthenticationPrincipal User user) {
+    public String increaseDishQuantity(@PathVariable Dish dish, @AuthenticationPrincipal User user) {
         requestItemService.addItem(dish, user);
         return "redirect:/cart";
     }
