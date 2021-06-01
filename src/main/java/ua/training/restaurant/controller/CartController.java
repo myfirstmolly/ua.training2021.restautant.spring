@@ -28,10 +28,7 @@ public class CartController {
     @GetMapping
     public String getCart(Model model, @AuthenticationPrincipal User user) {
         requestService.findRequestInCart(user)
-                .ifPresent((req -> {
-                    if (!req.getRequestItems().isEmpty())
-                        model.addAttribute("request", req);
-                }));
+                .ifPresent(req -> model.addAttribute("request", req));
         return "cart";
     }
 
