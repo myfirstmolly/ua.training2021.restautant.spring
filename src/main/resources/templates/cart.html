@@ -47,7 +47,7 @@
             <b id="sum" th:text="${request.totalPrice/100}"></b>
             <b th:text="#{currency}"></b>
         </div>
-        <form th:action="@{/cart/checkout}" class="checkout" method="get">
+        <form th:if="${request != null}" th:action="@{/cart/checkout}" class="checkout" method="get">
             <button type="submit" th:text="#{checkout}"></button>
         </form>
     </div>
