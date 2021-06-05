@@ -2,7 +2,6 @@ package ua.training.restaurant.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,7 +28,7 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler({EmptyStatusException.class, EmptyRequestException.class,
             RequestNotFoundException.class, DishNotFoundException.class})
     public String handleEmptyStatusException(Exception e, Model model) {
-        model.addAttribute("errorMessage", e.getMessage());
+        model.addAttribute("message", e.getMessage());
         return "error";
     }
 

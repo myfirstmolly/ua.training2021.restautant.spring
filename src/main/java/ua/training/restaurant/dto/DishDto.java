@@ -1,6 +1,8 @@
 package ua.training.restaurant.dto;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ua.training.restaurant.entities.Category;
 
@@ -12,6 +14,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class DishDto implements Serializable {
 
     @NotNull(message = "{dish.name.blank}")

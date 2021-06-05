@@ -11,4 +11,6 @@ public interface UserService extends UserDetailsService {
 
     User save(UserDto user) throws NotUniqueUsernameException;
 
+    void delete(User user);
+
 }
