@@ -1,7 +1,7 @@
 package ua.training.restaurant.service.impl;
 
+import ua.training.restaurant.dao.CategoryDao;
 import ua.training.restaurant.entities.Category;
-import ua.training.restaurant.repository.CategoryRepository;
 import ua.training.restaurant.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,15 +13,15 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryDao categoryDao;
 
     @Override
     public Optional<Category> findById(Integer id) {
-        return categoryRepository.findById(id);
+        return categoryDao.findById(id);
     }
 
     @Override
     public List<Category> findAll() {
-        return categoryRepository.findAll();
+        return categoryDao.findAll();
     }
 }

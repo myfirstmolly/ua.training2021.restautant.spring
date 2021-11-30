@@ -1,11 +1,11 @@
 package ua.training.restaurant.service.impl;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import ua.training.restaurant.dao.UserDao;
 import ua.training.restaurant.dto.UserDto;
 import ua.training.restaurant.entities.Role;
 import ua.training.restaurant.entities.User;
 import ua.training.restaurant.exceptions.NotUniqueUsernameException;
-import ua.training.restaurant.repository.UserRepository;
 import ua.training.restaurant.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserDao userDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
                 .role(Role.CUSTOMER)
                 .build();
         try {
-            return userRepository.save(u);
+            return userDao.save(u);
         } catch (DataIntegrityViolationException ex) {
             throw new NotUniqueUsernameException();
         }
@@ -41,12 +41,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(User user) {
-        userRepository.delete(user);
+        userDao.delete(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return userRepository.findByUsername(s)
+        return userDao.findByUsername(s)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
 }

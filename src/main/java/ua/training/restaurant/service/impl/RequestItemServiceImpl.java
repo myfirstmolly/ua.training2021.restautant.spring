@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.training.restaurant.dao.RequestDao;
+import ua.training.restaurant.dao.RequestItemDao;
 import ua.training.restaurant.entities.*;
-import ua.training.restaurant.repository.RequestItemRepository;
-import ua.training.restaurant.repository.RequestRepository;
 import ua.training.restaurant.service.RequestItemService;
 
 @Service
@@ -15,10 +15,10 @@ import ua.training.restaurant.service.RequestItemService;
 public class RequestItemServiceImpl implements RequestItemService {
 
     @Autowired
-    private RequestItemRepository requestItemRepository;
+    private RequestItemDao requestItemRepository;
 
     @Autowired
-    private RequestRepository requestRepository;
+    private RequestDao requestRepository;
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)

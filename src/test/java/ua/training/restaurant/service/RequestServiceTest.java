@@ -3,11 +3,10 @@ package ua.training.restaurant.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ua.training.restaurant.entities.Status;
 import ua.training.restaurant.entities.User;
 import ua.training.restaurant.repository.UserRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class RequestServiceTest {
